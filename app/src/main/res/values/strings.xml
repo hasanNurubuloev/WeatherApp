@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">WeatherApp</string>
     <string name="hello">Hello World!</string>
-    <string name="skip">skip</string>
+    <string name="skip" translatable="false">skip</string>
+    <string name="next" translatable="false">next</string>
+    <string name="start">start</string>
 </resources>
