@@ -1,9 +1,11 @@
 package com.example.weatherapp.ui.main;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,7 +26,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -172,7 +173,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void timeAndData() {
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm" );
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
         Date date1 = new Date();
         Date date2 = new Date();
         date1.setTime((long) data.getSys().getSunrise() * 1000);
@@ -182,7 +183,7 @@ public class MainActivity extends BaseActivity {
         sunricevalue.setText(daty);
         sunset_value.setText(daty1);
         Calendar cal = Calendar.getInstance();
-         SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-YYYY Время:HH:MM" );
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-YYYY Время:HH:MM");
         String format = sdf.format(cal.getTime());
         data_text.setText(format);
     }
@@ -195,5 +196,21 @@ public class MainActivity extends BaseActivity {
 
     public static void start(Context context) {
         context.startActivity(new Intent(context, MainActivity.class));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.update_main, menu);
+        return true;
+    }
+
+    public void update(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.update:
+                fetchCurrentWeather();
+                timeAndData();
+        }
     }
 }
