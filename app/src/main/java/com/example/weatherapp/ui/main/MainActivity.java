@@ -81,7 +81,7 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.text_sunrice)
     TextView sunrice;
     @BindView(R.id.text_sunrice_value)
-    TextView sunrice_value;
+    TextView sunricevalue;
 
 
     @Override
@@ -124,7 +124,7 @@ public class MainActivity extends BaseActivity {
                                 date2.setTime((long) data.getSys().getSunset() * 1000);
                                 String daty = dateFormat.format(date1.getTime());
                                 String daty1 = dateFormat.format(date2.getTime());
-                                sunrice_value.setText(daty);
+                                sunricevalue.setText(daty);
                                 sunset_value.setText(daty1);
                                 Calendar cal = Calendar.getInstance();
                                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-YYYY Время:HH:MM");
