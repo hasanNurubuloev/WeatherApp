@@ -54,7 +54,7 @@ public class Main {
         this.tempMin = tempMin;
     }
 
-    public Double getTempMax() {
+    public Double  getTempMax() {
         return tempMax;
     }
 

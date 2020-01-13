@@ -16,4 +16,6 @@
     <string name="pressure">Pressure</string>
     <string name="cloudiness">Cloudiness</string>
     <string name="sunset">Sunset</string>
+
+
 </resources>
