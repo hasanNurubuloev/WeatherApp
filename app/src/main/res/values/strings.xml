@@ -3,5 +3,17 @@
     <string name="hello">Hello World!</string>
     <string name="skip" translatable="false">skip</string>
     <string name="next" translatable="false">next</string>
-    <string name="start">start</string>
+    <string name="start" translatable="false">start</string>
+    <string name="now" translatable="false">Now</string>
+    <string name="little_cloud">Little cloud</string>
+    <string name="today">Today</string>
+    <string name="max">Max</string>
+    <string name="min">Min</string>
+    <string name="wind">Wind</string>
+    <string name="value">Value</string>
+    <string name="humidity">Humidity</string>
+    <string name="sunrice">Sunrice</string>
+    <string name="pressure">Pressure</string>
+    <string name="cloudiness">Cloudiness</string>
+    <string name="sunset">Sunset</string>
 </resources>

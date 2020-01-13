@@ -5,31 +5,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.arch.core.executor.TaskExecutor;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.example.weatherapp.R;
 
-import butterknife.BindView;
+import java.util.ArrayList;
 
 public class OnBoardAdapter extends PagerAdapter {
-    private Context context;
-    private String[] texts;
-    private int[] pictures;
+    private ArrayList<OnBoardItem> data = new ArrayList<>();
 
-    public  OnBoardAdapter (Context context , String[] texts, int[] pictures ){
-        this.context = context;
-        this.texts = texts;
-        this.pictures = pictures;
+    public OnBoardAdapter() {
+
     }
+
+    public void update(ArrayList<OnBoardItem> data) {
+        this.data = data;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
-        return texts.length;
+        return data.size();
     }
 
     @Override
@@ -43,19 +43,19 @@ public class OnBoardAdapter extends PagerAdapter {
         TextView boardText;
         ImageView boardImage;
 
-        LayoutInflater inflater =(LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View itemView = inflater.inflate(R.layout.item_onboard , container , false);
+        LayoutInflater inflater = (LayoutInflater) container.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View itemView = inflater.inflate(R.layout.item_onboard, container, false);
 
         boardText = itemView.findViewById(R.id.tvTitle);
-        boardText.setText(texts[position]);
+        boardText.setText(data.get(position).getTitle());
 
         boardImage = itemView.findViewById(R.id.imgOnBoard);
-        boardImage.setImageResource(pictures[position]);
+        boardImage.setImageResource(data.get(position).getImage());
 
         container.addView(itemView);
         return itemView;
-
     }
+
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {

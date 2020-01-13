@@ -18,6 +18,7 @@ import com.example.weatherapp.ui.base.BaseActivity;
 import com.example.weatherapp.ui.main.MainActivity;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -45,39 +46,25 @@ public class OnBoardActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-
-        String texts[] = new String[]{"In the application", "in the application you can find out information about the weather",
-                "for attention"};
-        int[] pictures = new int[]{R.drawable.welcome, R.drawable.weather, R.drawable.thakn_you};
-
-        PagerAdapter adapter = new OnBoardAdapter(OnBoardActivity.this, texts, pictures);
-        pager.setAdapter(adapter);
-        pager.setCurrentItem(0);
-        tabLayout.setupWithViewPager(pager, true);
-
-        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                currentPage = position;
-//                if (position )
-//                next.setVisibility();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
-
+        initViewPagerAdapter();
     }
 
+    private ArrayList<OnBoardItem> getData() {
+        ArrayList<OnBoardItem> items = new ArrayList<>();
+        items.add(new OnBoardItem("In the application", R.drawable.welcome));
+        items.add(new OnBoardItem("in the application you can find out information about the weather", R.drawable.weather));
+        items.add(new OnBoardItem("for attention", R.drawable.thakn_you));
+        return items;
+    }
 
+    public void initViewPagerAdapter() {
+        OnBoardAdapter adapter = new OnBoardAdapter();
+        pager.setAdapter(adapter);
+        adapter.update(getData());
+        init();
+        tabLayout.setupWithViewPager(pager, true);
+
+    }
 
     public void onClick(View v) {
         if (pager.getCurrentItem() != 2) {
@@ -107,5 +94,24 @@ public class OnBoardActivity extends BaseActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void init() {
+        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                currentPage = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 }
