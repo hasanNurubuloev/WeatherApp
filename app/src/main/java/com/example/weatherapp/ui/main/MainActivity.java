@@ -17,15 +17,13 @@ import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.DataUrlLoader;
 import com.example.weatherapp.R;
 import com.example.weatherapp.data.entity.CurrentWeather;
 import com.example.weatherapp.data.internet.RetrofitBuilder;
 import com.example.weatherapp.ui.base.BaseActivity;
+import com.example.weatherapp.utils.DateUtils;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -147,7 +145,11 @@ public class MainActivity extends BaseActivity {
                                 timeAndData();
                                 glide(response);
                             }
+                        }else {
+                            Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
+
                         }
+
                     }
 
                     @Override
@@ -173,19 +175,9 @@ public class MainActivity extends BaseActivity {
     }
 
     private void timeAndData() {
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-        Date date1 = new Date();
-        Date date2 = new Date();
-        date1.setTime((long) data.getSys().getSunrise() * 1000);
-        date2.setTime((long) data.getSys().getSunset() * 1000);
-        String daty = dateFormat.format(date1.getTime());
-        String daty1 = dateFormat.format(date2.getTime());
-        sunricevalue.setText(daty);
-        sunset_value.setText(daty1);
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMMM-YYYY Время:HH:MM");
-        String format = sdf.format(cal.getTime());
-        data_text.setText(format);
+        sunricevalue.setText(DateUtils.parceSunSet(data.getSys().getSunrise() ));
+        sunset_value.setText(DateUtils.parceSunSet(data.getSys().getSunset()));
+        data_text.setText(DateUtils.parseData(data));
     }
 
     public void glide(Response<CurrentWeather> response) {
