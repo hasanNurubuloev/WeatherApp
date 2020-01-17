@@ -1,5 +1,6 @@
 package com.example.weatherapp.ui.main;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ import static com.example.weatherapp.BuildConfig.API_KEY;
 public class MainActivity extends BaseActivity {
 
 
+    private static final String WEATHER = "weather";
     @BindView(R.id.toolbar_main)
     Toolbar toolbar;
 
@@ -111,6 +113,13 @@ public class MainActivity extends BaseActivity {
         fetchCurrentWeather();
         initRecycler();
         getData();
+    }
+
+    public static void startForSplash(Context context, ForecastEntity forecastEntity) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(WEATHER, forecastEntity);
+        context.startActivity(intent);
+
     }
 
     public void setSpinner() {
@@ -212,10 +221,10 @@ public class MainActivity extends BaseActivity {
         adapter = new ForecastAdapter();
         recyclerView.setAdapter(adapter);
     }
-
     private void getData() {
         Intent intent = getIntent();
         ForecastEntity forecastEntity = (ForecastEntity) intent.getSerializableExtra(WEATHER_DATA);
-        adapter.update(forecastEntity.getForecastWeatherList());
+            adapter.update(forecastEntity.getForecastWeatherList());
+
     }
 }

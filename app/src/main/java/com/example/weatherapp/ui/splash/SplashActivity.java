@@ -1,16 +1,19 @@
 package com.example.weatherapp.ui.splash;
 
 import android.os.Bundle;
-
-import androidx.appcompat.widget.Toolbar;
+import android.util.Log;
 
 import com.example.weatherapp.R;
-import com.example.weatherapp.data.PreferenceHelper;
+import com.example.weatherapp.data.entity.forecast.ForecastEntity;
+import com.example.weatherapp.data.internet.RetrofitBuilder;
 import com.example.weatherapp.ui.base.BaseActivity;
 import com.example.weatherapp.ui.main.MainActivity;
-import com.example.weatherapp.ui.onboard.OnBoardActivity;
 
-import butterknife.BindView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.example.weatherapp.BuildConfig.API_KEY;
 
 public class SplashActivity extends BaseActivity {
 
@@ -23,17 +26,37 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initLaunch();
+        fetchForecast();
     }
 
-    private void initLaunch() {
-        if (PreferenceHelper.getIsNotFirstLaunch()) {
-            MainActivity.start(this);
-        } else {
-            OnBoardActivity.start(this);
-            PreferenceHelper.setIsFirstLaunch();
-        }
 
-        finish();
+    private void fetchForecast() {
+        RetrofitBuilder.getService().getForecast("Bishkek", API_KEY, "metric")
+                .enqueue(new Callback<ForecastEntity>() {
+                    @Override
+                    public void onResponse(Call<ForecastEntity> call, Response<ForecastEntity> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            MainActivity.startForSplash(getApplicationContext(), response.body());
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ForecastEntity> call, Throwable t) {
+                        Log.e("ololo", "onResponse: ");
+
+                    }
+                });
+//    }
+//    private void initLaunch() {
+//        if (PreferenceHelper.getIsNotFirstLaunch()) {
+//            MainActivity.start(this);
+//        } else {
+//            OnBoardActivity.start(this);
+//            PreferenceHelper.setIsFirstLaunch();
+//        }
+//
+//        finish();
+//    }
     }
 }

@@ -3,9 +3,10 @@ package com.example.weatherapp.data.entity.forecast;
 import com.example.weatherapp.data.entity.current.CurrentWeather;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ForecastEntity {
+public class ForecastEntity implements Serializable {
     private String cod;
 
     private int message;

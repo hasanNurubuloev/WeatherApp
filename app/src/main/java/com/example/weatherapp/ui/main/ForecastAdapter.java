@@ -19,7 +19,6 @@ private ArrayList<CurrentWeather> forecastWeatherList = new ArrayList<>();
     @Override
     public ForecastViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_forecast, parent, false);
-
         return new ForecastViewHolder(view);
     }
 
@@ -30,7 +29,7 @@ private ArrayList<CurrentWeather> forecastWeatherList = new ArrayList<>();
 
     @Override
     public void onBindViewHolder(@NonNull ForecastViewHolder holder, int position) {
-        holder.bind(forecastWeatherList.get(position));
+        holder.bind(forecastWeatherList);
     }
 
     @Override
