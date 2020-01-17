@@ -1,6 +1,6 @@
 package com.example.weatherapp.utils;
 
-import com.example.weatherapp.data.entity.CurrentWeather;
+import com.example.weatherapp.data.entity.current.CurrentWeather;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

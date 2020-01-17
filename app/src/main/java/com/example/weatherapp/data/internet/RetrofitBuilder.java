@@ -3,6 +3,8 @@ package com.example.weatherapp.data.internet;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.weatherapp.BuildConfig.BASE_URL;
+
 public class RetrofitBuilder {
 
     public static RetrofitService retrofitService;
@@ -15,9 +17,9 @@ public class RetrofitBuilder {
         return retrofitService;
     }
 
-    private static RetrofitService buildRetrofit() {
+    public static RetrofitService buildRetrofit() {
         return  new Retrofit.Builder()
-                .baseUrl("http://api.openweathermap.org/")
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(RetrofitService.class);

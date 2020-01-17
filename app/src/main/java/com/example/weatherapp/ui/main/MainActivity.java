@@ -14,12 +14,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.model.DataUrlLoader;
 import com.example.weatherapp.R;
-import com.example.weatherapp.data.entity.CurrentWeather;
+import com.example.weatherapp.data.entity.current.CurrentWeather;
+import com.example.weatherapp.data.entity.forecast.ForecastEntity;
 import com.example.weatherapp.data.internet.RetrofitBuilder;
 import com.example.weatherapp.ui.base.BaseActivity;
 import com.example.weatherapp.utils.DateUtils;
@@ -31,6 +33,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.weatherapp.BuildConfig.API_KEY;
+
 public class MainActivity extends BaseActivity {
 
 
@@ -41,8 +45,6 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.image_sun)
     ImageView imageView;
-    //    @BindView(R.id.text_location)
-//    TextView location;
     @BindView(R.id.text_cloudiness)
     TextView cloudiness;
     @BindView(R.id.text_cloudiness_value)
@@ -89,8 +91,11 @@ public class MainActivity extends BaseActivity {
     TextView sunricevalue;
 
     private Spinner spinner;
-
     private CurrentWeather data;
+    public static final String WEATHER_DATA = "weather";
+    private RecyclerView recyclerView;
+    private ForecastAdapter adapter;
+
 
     @Override
     protected int getViewLayout() {
@@ -103,8 +108,9 @@ public class MainActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         setSpinner();
-
-
+        fetchCurrentWeather();
+        initRecycler();
+        getData();
     }
 
     public void setSpinner() {
@@ -113,14 +119,11 @@ public class MainActivity extends BaseActivity {
                 R.array.countries, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-//        city = spinner.getSelectedItem().toString();
-//        Toast.makeText(getApplicationContext(), city, Toast.LENGTH_SHORT).show();
 
         AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 city = (String) parent.getItemAtPosition(position);
-//                location.setText(city);
                 fetchCurrentWeather();
 
             }
@@ -134,20 +137,17 @@ public class MainActivity extends BaseActivity {
     }
 
     private void fetchCurrentWeather() {
-        RetrofitBuilder.getService().fetchtCurrentWeather(city, "4d63c1acf9a085448b23971128e5eddd", "metric").
+        RetrofitBuilder.getService().fetchtCurrentWeather(city, API_KEY, "metric").
                 enqueue(new Callback<CurrentWeather>() {
                     @Override
                     public void onResponse(Call<CurrentWeather> call, Response<CurrentWeather> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             data = response.body();
-                            if (data != null) {
-                                changeValues();
-                                timeAndData();
-                                glide(response);
-                            }
-                        }else {
+                            changeValues(data);
+                            timeAndData();
+                            glide(response);
+                        } else {
                             Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
-
                         }
 
                     }
@@ -160,7 +160,7 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    private void changeValues() {
+    private void changeValues(CurrentWeather data) {
         pressure_value.setText(String.valueOf(data.getMain().getPressure()));
         now_gradus.setText(String.valueOf(data.getMain().getTemp()));
         max_gradus.setText(String.valueOf(data.getMain().getTempMax()));
@@ -168,14 +168,12 @@ public class MainActivity extends BaseActivity {
         humidity_value.setText(String.valueOf(data.getMain().getHumidity()));
         wind_value.setText(String.valueOf(data.getWind().getSpeed()));
         cloudiness_value.setText(String.valueOf(data.getClouds().getAll()));
-//        location.setText(city);
         little_cloud.setText(data.getWeather().get(0).getDescription());
-
 
     }
 
     private void timeAndData() {
-        sunricevalue.setText(DateUtils.parceSunSet(data.getSys().getSunrise() ));
+        sunricevalue.setText(DateUtils.parceSunSet(data.getSys().getSunrise()));
         sunset_value.setText(DateUtils.parceSunSet(data.getSys().getSunset()));
         data_text.setText(DateUtils.parseData(data));
     }
@@ -197,12 +195,27 @@ public class MainActivity extends BaseActivity {
         return true;
     }
 
-    public void update(MenuItem item) {
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
 
             case R.id.update:
                 fetchCurrentWeather();
                 timeAndData();
+
         }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void initRecycler() {
+        recyclerView = findViewById(R.id.recyclerView);
+        adapter = new ForecastAdapter();
+        recyclerView.setAdapter(adapter);
+    }
+
+    private void getData() {
+        Intent intent = getIntent();
+        ForecastEntity forecastEntity = (ForecastEntity) intent.getSerializableExtra(WEATHER_DATA);
+        adapter.update(forecastEntity.getForecastWeatherList());
     }
 }
